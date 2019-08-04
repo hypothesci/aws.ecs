@@ -10,13 +10,14 @@
 #' @param revision
 #' @param count
 #' @param environment
+#' @param command
 #'
 #' @return
 #' @export
 #'
 #' @examples
 run_task <- function(region, family, cluster, subnets, security_groups = list(), assign_public_ip = F,
-	revision = NULL, count = 1, environment = list()) {
+	revision = NULL, count = 1, environment = list(), command = c()) {
 	task_def <- if (!is.null(revision)) paste0(family, ":", revision) else family
 
 	ecs_http(region, "POST", "RunTask", body = list(
@@ -27,7 +28,8 @@ run_task <- function(region, family, cluster, subnets, security_groups = list(),
 		overrides = list(
 			containerOverrides = list(list(
 				name = jsonlite::unbox(family),
-				environment = environment
+				environment = environment,
+				command = command
 			))
 		),
 		networkConfiguration = list(

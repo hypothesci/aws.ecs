@@ -6,7 +6,7 @@
 \usage{
 run_task(region, family, cluster, subnets, security_groups = list(),
   assign_public_ip = F, revision = NULL, count = 1,
-  environment = list())
+  environment = list(), command = c())
 }
 \arguments{
 \item{environment}{}
