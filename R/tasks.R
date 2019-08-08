@@ -11,13 +11,14 @@
 #' @param count
 #' @param environment
 #' @param command
+#' @param started_by
 #'
 #' @return
 #' @export
 #'
 #' @examples
 run_task <- function(region, family, cluster, subnets, security_groups = list(), assign_public_ip = F,
-	revision = NULL, count = 1, environment = list(), command = c()) {
+	revision = NULL, count = 1, environment = list(), command = c(), started_by = "") {
 	task_def <- if (!is.null(revision)) paste0(family, ":", revision) else family
 
 	ecs_http(region, "POST", "RunTask", body = list(
@@ -39,7 +40,7 @@ run_task <- function(region, family, cluster, subnets, security_groups = list(),
 				subnets = subnets
 			)
 		),
-		startedBy = jsonlite::unbox("cloudburst")
+		startedBy = jsonlite::unbox(started_by)
 	))
 }
 
@@ -69,12 +70,15 @@ describe_tasks <- function(region, tasks, cluster) {
 #' @param task_role
 #' @param cpu
 #' @param memory
+#' @param log_group
+#' @param log_stream_prefix
 #'
 #' @return
 #' @export
 #'
 #' @examples
-register_task_definition <- function(region, family, image, execution_role, task_role, cpu, memory) {
+register_task_definition <- function(region, family, image, execution_role, task_role, cpu, memory,
+	log_group = family, log_stream_prefix = family) {
 	ecs_http(region, "POST", "RegisterTaskDefinition", body = list(
 		networkMode = jsonlite::unbox("awsvpc"),
 		containerDefinitions = list(list(
@@ -86,9 +90,9 @@ register_task_definition <- function(region, family, image, execution_role, task
 			logConfiguration = list(
 				logDriver = jsonlite::unbox("awslogs"),
 				options = list(
-					"awslogs-group" = jsonlite::unbox("cloudburst"),
+					"awslogs-group" = jsonlite::unbox(log_group),
 					"awslogs-region" = jsonlite::unbox(region),
-					"awslogs-stream-prefix" = jsonlite::unbox("cloudburst")
+					"awslogs-stream-prefix" = jsonlite::unbox(log_stream_prefix)
 				)
 			)
 		)),

@@ -6,10 +6,10 @@
 \usage{
 run_task(region, family, cluster, subnets, security_groups = list(),
   assign_public_ip = F, revision = NULL, count = 1,
-  environment = list(), command = c())
+  environment = list(), command = c(), started_by = "")
 }
 \arguments{
-\item{environment}{}
+\item{started_by}{}
 }
 \description{
 Title

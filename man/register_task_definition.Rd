@@ -5,10 +5,10 @@
 \title{Title}
 \usage{
 register_task_definition(region, family, image, execution_role, task_role,
-  cpu, memory)
+  cpu, memory, log_group = family, log_stream_prefix = family)
 }
 \arguments{
-\item{memory}{}
+\item{log_stream_prefix}{}
 }
 \description{
 Title
